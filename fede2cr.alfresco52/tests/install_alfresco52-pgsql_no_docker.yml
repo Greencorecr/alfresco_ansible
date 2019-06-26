@@ -4,4 +4,6 @@
   vars:
     role_path: alfresco52/
   roles:
-    - fede2cr.alfresco52
+    - alfresco52
+  tags:
+    [ install, pgsql ]

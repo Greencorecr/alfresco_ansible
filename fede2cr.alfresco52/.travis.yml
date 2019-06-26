@@ -9,7 +9,6 @@ install:
   - sudo systemctl start postgresql
   - sudo systemctl start mysql.service
   - sudo pip3 install ansible psutil
-  - ansible-galaxy install --roles-path . fede2cr.alfresco52
 
 script:
   - wget -O /home/travis/build/Greencorecr/alfresco_ansible/alfresco52/files/alfresco-community-installer-201602-linux-x64.bin https://ayera.dl.sourceforge.net/project/alfresco/Alfresco%20201602%20Community/alfresco-community-installer-201602-linux-x64.bin
@@ -19,3 +18,6 @@ script:
   - "ansible-playbook -i inventory/hosts-travis-upgrade.yml -C *yml"
   - "ansible-playbook -i inventory/hosts-travis-install-old.yml install_alfresco52-mysql_no_docker.yml --tags install,mysql_install,mysql"
   - "ansible-playbook -i inventory/hosts-travis-upgrade.yml install_alfresco52-mysql_no_docker.yml --tags install,mysql_preupgrade,mysql,mysql_postupgrade"
+
+notifications:
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/

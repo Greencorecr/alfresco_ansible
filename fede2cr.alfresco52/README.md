@@ -16,12 +16,6 @@ El rol de Ansible para alfresco ha sido creado de forma tal que las tareas se en
 
 ### Instalación desde cero
 
-Iniciamos por descargar el rol creado para administrar Alfresco 5.2, ejecutando:
-
-```
-ansible-galaxy install --roles-path . fede2cr.alfresco52
-```
-
 #### Requerimientos para Ansible
 
 En un equipo con Ubuntu 18.04 físico o virtualizado, con espacio suficiente para la instalación de Alfresco y el respaldo de sus datos, donde necesita primero activar el servicio de ssh, copiar una llave de SSH hacia el usuario que utilizará para la conexión, y crear un permiso de sudo, creando con el usuario apropiado el archivo **``/etc/sudoers.d/ansible``**:
