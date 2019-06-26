@@ -1,9 +1,0 @@
----
-- name: Instala Alfresco 5.2 fuera de ambiente de contenedores
-  hosts: all
-  vars:
-    role_path: alfresco52/
-  roles:
-    - alfresco52
-  tags:
-    [ install, mysql_preupgrade, mysql_install, mysql, mysql_postinstall ]
