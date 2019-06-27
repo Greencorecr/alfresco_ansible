@@ -341,7 +341,7 @@
   tags: install
 - name: Espera a que se complete instalador
   pause:
-    seconds: 120
+    seconds: 180
   tags: install
 - name: Comprobamos servicio de Alfresco por puerto TCP/8080
   uri:
@@ -412,7 +412,7 @@
   tags: mysql_postupgrade
 - name: Espera a que se complete instalador
   pause:
-    seconds: 120
+    seconds: 180
   tags: mysql_postupgrade
 - name: Comprobamos servicio de Alfresco por puerto TCP/8080 luego de actualizar
   uri:
