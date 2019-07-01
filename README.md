@@ -1,4 +1,4 @@
-# alfresco_ansible [![Build Status](https://travis-ci.org/fede2cr/alfresco52.svg?branch=master)](https://travis-ci.org/fede2cr/alfresco52)
+# alfresco_ansible [![Build Status](https://travis-ci.org/Greencorecr/alfresco_greencore_.svg?branch=master)](https://travis-ci.org/Greencorecr/alfresco_greencore)
 
 Recetas de ansible para Alfresco
 
