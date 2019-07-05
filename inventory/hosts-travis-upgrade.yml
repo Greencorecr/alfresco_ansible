@@ -9,5 +9,4 @@
         alf_root: /opt/alfresco_community/
         dir_root: /opt/alfresco_community/alf_data
         solr4_root: /opt/alfresco_community/alf_data/solr4/index
-
-
+        mysql_root_pass: root

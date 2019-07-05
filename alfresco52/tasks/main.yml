@@ -4,6 +4,13 @@
 # TODO: Validar logeando usuario, subiendo contenido,
 #       bajando contenido, y borrando contenido
 # TODO, mover "hasta que palme tomcat", y comprobación a handlers
+  vars:
+    mariadb_cron_backup: true
+    mariadb_cron_optimizacion: true
+
+  roles:
+    - { role: CarlosLongarela.mariadb }
+
 - name: Revisa que no se ejecuten tags que nadie llamo
   fail:
     msg: Nadie llamo a este tag...
@@ -84,7 +91,7 @@
 - name: Respalda base de datos Alfresco, y almancena en HOME
   mysql_db:
     login_user: root
-    login_password: root
+    login_password: "{{ mysql_root_pass }}"
     login_unix_socket: /var/run/mysqld/mysqld.sock
     state: dump
     name: alfresco
@@ -118,20 +125,17 @@
     format: bz2
   tags: mysql_preupgrade
   become: true
-# TODO:Verificar tamaño, al menos 700K
-# TODO: Comprobar que tenemos doble de espacio, de lo que pesa Alfresco
 - name: Mueve el Alfresco original a otro directorio antes de actualizar
   command: mv {{ alf_root }} /opt/alfresco.old
   tags: mysql_preupgrade
   become: true
   changed_when: true
-# Borrar basee de datos
-- name: Crea base de datos en MariaDB
+- name: Elimina base de datos en MariaDB
   mysql_db:
     name: alfresco
     state: absent
     login_user: root
-    login_password: root
+    login_password: "{{ mysql_root_pass }}"
     login_unix_socket: /var/run/mysqld/mysqld.sock
     encoding: utf8
   become: true
@@ -144,7 +148,7 @@
     state: absent
     priv: 'alfresco.*:ALL'
     login_user: root
-    login_password: root
+    login_password: "{{ mysql_root_pass }}"
     login_unix_socket: /var/run/mysqld/mysqld.sock
   loop:
     - "{{ ansible_hostname }}"
@@ -169,7 +173,7 @@
   debconf:
     name: mariadb-server
     question: "{{ item }}"
-    value: "root"
+    value: "{{ mysql_root_pass }}"
     vtype: password
   loop:
     - mysql-server/root_password
@@ -200,7 +204,7 @@
     name: root
     host: "{{ item }}"
     login_unix_socket: /var/run/mysqld/mysqld.sock
-    password: "root"
+    password: "{{ mysql_root_pass }}"
     priv: '*.*:ALL,GRANT'
     check_implicit_admin: true
   loop:
@@ -215,7 +219,7 @@
     name: alfresco
     state: present
     login_user: root
-    login_password: root
+    login_password: "{{ mysql_root_pass }}"
     login_unix_socket: /var/run/mysqld/mysqld.sock
     encoding: utf8
   become: true
@@ -230,7 +234,7 @@
     state: present
     priv: 'alfresco.*:ALL'
     login_user: root
-    login_password: root
+    login_password: "{{ mysql_root_pass }}"
     login_unix_socket: /var/run/mysqld/mysqld.sock
   loop:
     - "{{ ansible_hostname }}"
@@ -383,7 +387,7 @@
     name: alfresco
     target: "/{{ ansible_env.HOME }}/alfresco-{{ inventory_hostname }}.sql"
     login_user: root
-    login_password: root
+    login_password: "{{ mysql_root_pass }}"
     login_unix_socket: /var/run/mysqld/mysqld.sock
   tags: mysql_postupgrade
   become: true
@@ -408,8 +412,3 @@
     url: http://localhost:8080/share/
     status_code: 200
   tags: mysql_postupgrade
-
-# TODO: Sincronizar respaldos afuera o disco externo?
-
-# Comprobar servicios con handler
-# Verificar contenido subido anteriormente
