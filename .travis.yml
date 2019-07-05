@@ -5,14 +5,15 @@ before_install:
 
 install:
   - sudo apt-get purge mysql-server*
-  - sudo apt-get install -qy lxc libvirt-daemon-system python3-pip  wireshark-common apache2 acl python-psycopg2 libpq-dev postgresql libpostgresql-jdbc-java python-pymysql mariadb-server
+  - sudo apt-get install -qy python3-pip python-psycopg2 libpq-dev postgresql libpostgresql-jdbc-java python-pymysql mariadb-server
   - sudo systemctl start postgresql
   - sudo systemctl start mysql.service
-  - sudo pip install ansible psutil
+  - sudo pip install ansible psutil molecule
 
 script:
   - wget -O /home/travis/build/Greencorecr/alfresco_ansible/alfresco52/files/alfresco-community-installer-201602-linux-x64.bin https://ayera.dl.sourceforge.net/project/alfresco/Alfresco%20201602%20Community/alfresco-community-installer-201602-linux-x64.bin
   - wget -O /home/travis/build/Greencorecr/alfresco_ansible/alfresco52/files/alfresco-community-installer-201707-linux-x64.bin https://download.alfresco.com/release/community/201707-build-00028/alfresco-community-installer-201707-linux-x64.bin
+  - ( cd alfresco52 ; molecule lint )
   - "ansible -i inventory/hosts-travis.yml --list-hosts all"
   - "ansible-playbook -i inventory/hosts-travis-upgrade.yml --syntax-check *yml"
   - "ansible-playbook -i inventory/hosts-travis.upgrade.yml -C *yml"
