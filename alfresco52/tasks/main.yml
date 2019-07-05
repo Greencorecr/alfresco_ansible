@@ -4,13 +4,6 @@
 # TODO: Validar logeando usuario, subiendo contenido,
 #       bajando contenido, y borrando contenido
 # TODO, mover "hasta que palme tomcat", y comprobación a handlers
-vars:
-  mariadb_cron_backup: true
-  mariadb_cron_optimizacion: true
-
-roles:
-  - { role: CarlosLongarela.mariadb }
-
 - name: Revisa que no se ejecuten tags que nadie llamo
   fail:
     msg: Nadie llamo a este tag...
