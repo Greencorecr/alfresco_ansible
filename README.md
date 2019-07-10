@@ -61,6 +61,7 @@ Por ejemplo, en ``inventory/hosts.yml``:
         dir_root: /opt/alfresco_community/alf_data                                                       # Directorio alf_data
         solr4_root: /opt/alfresco_community/alf_data/solr4/index                                         # Directorio de Solr
         installer_delay: 190                                                                             # Tiempo a esperar que complete instalador
+        mysql_root_pass: root
 ```
 
 Antes de continuar, comprobamos el inventario y la ejecución de ansible en general, ejecutando:

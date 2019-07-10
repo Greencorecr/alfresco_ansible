@@ -7,4 +7,3 @@
     mariadb_cron_optimizacion: true
   roles:
     - alfresco52
-    - CarlosLongarela.mariadb
