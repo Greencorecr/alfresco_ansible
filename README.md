@@ -91,6 +91,12 @@ Si no detectamos ningún problema, ahora podemos ejecutar sin la opción ``-C`` 
 ansible-playbook -i inventory/hosts.yml install_alfresco52-mysql_no_docker.yml --tags install,mysql_install,mysql
 ```
 
+En caso de utilizar directamente PostgreSQL, puede utilizar:
+
+```
+ansible-playbook -i inventory/hosts.yml install_alfresco52-mysql_no_docker.yml --tags install,pgsql
+```
+
 ### Actualización de Alfresco
 
 Antes de iniciar se recomienda comprobar los servicios del equipo antes de actualizar, seguir las normas de solicitud de cambio, utilizar equipos de prueba y siempre realizar respaldos de equipos en producción.
