@@ -5,5 +5,3 @@
     role_path: alfresco52/
   roles:
     - alfresco52
-  tags:
-    [ install, pgsql ]
