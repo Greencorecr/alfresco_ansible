@@ -6,7 +6,7 @@
 # TODO, mover "hasta que palme tomcat", y comprobación a handlers
 - name: Revisa que no se ejecuten tags que nadie llamo
   fail:
-    msg: Nadie llamo a este tag...
+    msg: Debe ejecutar utilizando tags desde la línea de comando
   tags:
     - nadiemellamo
 - name: Instala aptitude (requerido por ansible)
@@ -279,6 +279,16 @@
     msg: Alfresco ha sido instalado, omitiendo completar instalación
   when: alfresco_dir.stat.isdir is defined and alfresco_dir.stat.isdir
   tags: install
+- name: Revisa si está descargado el instalador {{ alfresco_installer }}
+  stat:
+    file: "{{ ansible_env.HOME }}/{{ alfresco_installer }}"
+  register: alfresco_installer
+- name: Descarga instalador de Alfresco si no existe
+  get_url:
+    url: https://download.alfresco.com/release/community/201707-build-00028/alfresco-community-installer-201707-linux-x64.bin
+    dest: "{{ ansible_env.HOME }}/{{ alfresco_installer }}"
+    mode: 0755
+    owner: "{{ ansible_user }}"
 - name: Instala Alfresco
   vars:
     cmd: "{{ ansible_env.HOME }}/{{ alfresco_installer }}"

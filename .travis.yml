@@ -12,7 +12,7 @@ install:
 
 script:
   - wget -O /home/travis/build/Greencorecr/alfresco_ansible/alfresco52/files/alfresco-community-installer-201602-linux-x64.bin https://ayera.dl.sourceforge.net/project/alfresco/Alfresco%20201602%20Community/alfresco-community-installer-201602-linux-x64.bin
-  - wget -O /home/travis/build/Greencorecr/alfresco_ansible/alfresco52/files/alfresco-community-installer-201707-linux-x64.bin https://download.alfresco.com/release/community/201707-build-00028/alfresco-community-installer-201707-linux-x64.bin
+#  - wget -O /home/travis/build/Greencorecr/alfresco_ansible/alfresco52/files/alfresco-community-installer-201707-linux-x64.bin https://download.alfresco.com/release/community/201707-build-00028/alfresco-community-installer-201707-linux-x64.bin
   - ( cd alfresco52 ; molecule lint )
   - ansible-galaxy install CarlosLongarela.mariadb -p .
   - "ansible -i inventory/hosts-travis-upgrade.yml --list-hosts all"
