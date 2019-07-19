@@ -261,14 +261,6 @@
     owner: "{{ ansible_user }}"
     group: "{{ ansible_user }}"
   tags: mysql
-- name: Copia alfresco
-  copy:
-    src: "{{ role_path }}/files/{{ alfresco_installer }}"
-    dest: "{{ ansible_env.HOME }}"
-    mode: 0755
-    owner: "{{ ansible_user }}"
-    group: "{{ ansible_user }}"
-  tags: install
 - name: Revisa que Alfresco no esté instalado
   stat:
     path: /opt/alfresco_community
@@ -284,6 +276,14 @@
     file: "{{ ansible_env.HOME }}/{{ alfresco_installer }}"
   register: alfresco_installer
   tags: pgsql
+- name: Copia alfresco
+  copy:
+    src: "{{ role_path }}/files/{{ alfresco_installer }}"
+    dest: "{{ ansible_env.HOME }}"
+    mode: 0755
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+  tags: install
 - name: Descarga instalador de Alfresco si no existe
   vars:
     version_url: "alfresco-community-installer-201707-linux-x64.bin"
