@@ -273,7 +273,7 @@
   tags: install
 - name: Revisa si está descargado el instalador {{ alfresco_installer }}
   stat:
-    path: "{{ ansible_env.HOME }}/{{ alfresco_installer }}"
+    path: "{{ role_path }}/files/{{ alfresco_installer }}"
   register: pgsql_installer_path
   tags: pgsql
 - name: Debug de path
@@ -283,11 +283,11 @@
 - name: Descarga instalador de Alfresco si no existe
   vars:
     version_url: "alfresco-community-installer-201707-linux-x64.bin"
-    base_url: "/release/community/201707-build-00028/"
+    base_url: "/release/community/201707-build-00028"
     host_url: "https://download.alfresco.com"
   get_url:
-    url: "{{ host_url }}{{ version_url }}/{{ base_url}}"
-    dest: "{{ ansible_env.HOME }}/{{ alfresco_installer }}"
+    url: "{{ host_url }}{{ base_url }}/{{ version_url}}"
+    dest: "{{ role_path }}/files/{{ alfresco_installer }}"
     mode: 0755
     owner: "{{ ansible_user }}"
   tags: pgsql
