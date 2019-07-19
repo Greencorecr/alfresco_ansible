@@ -273,7 +273,7 @@
   tags: install
 - name: Revisa si está descargado el instalador {{ alfresco_installer }}
   stat:
-    file: "{{ ansible_env.HOME }}/{{ alfresco_installer }}"
+    path: "{{ ansible_env.HOME }}/{{ alfresco_installer }}"
   register: alfresco_installer
   tags: pgsql
 - name: Copia alfresco
