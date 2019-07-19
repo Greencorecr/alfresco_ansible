@@ -275,7 +275,7 @@
   stat:
     path: "{{ ansible_env.HOME }}/{{ alfresco_installer }}"
   register: pgsql_installer_path
-  tags: pgsql_installer_path
+  tags: pgsql
 - name: Debug de path
   debug:
     msg: pgsql_installer_path
