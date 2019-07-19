@@ -94,7 +94,7 @@ ansible-playbook -i inventory/hosts.yml install_alfresco52-mysql_no_docker.yml -
 En caso de utilizar directamente PostgreSQL, puede utilizar:
 
 ```
-ansible-playbook -i inventory/hosts.yml install_alfresco52-mysql_no_docker.yml --tags install,pgsql
+ansible-playbook -i inventory/hosts.yml install_alfresco52-pgsql_no_docker.yml --tags install,pgsql
 ```
 
 ### Actualización de Alfresco
