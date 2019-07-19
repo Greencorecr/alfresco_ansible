@@ -275,15 +275,7 @@
   stat:
     path: "{{ ansible_env.HOME }}/{{ alfresco_installer }}"
   register: alfresco_installer
-  tags: pgsql
-- name: Copia alfresco
-  copy:
-    src: "{{ role_path }}/files/{{ alfresco_installer }}"
-    dest: "{{ ansible_env.HOME }}"
-    mode: 0755
-    owner: "{{ ansible_user }}"
-    group: "{{ ansible_user }}"
-  tags: install
+  tags: pgsql_installer_path
 - name: Descarga instalador de Alfresco si no existe
   vars:
     version_url: "alfresco-community-installer-201707-linux-x64.bin"
@@ -295,6 +287,17 @@
     mode: 0755
     owner: "{{ ansible_user }}"
   tags: pgsql
+  when: >
+  pgsql_installer_path.stat.exists is defined and 
+  pgsql_installer_path.stat.exists
+- name: Copia alfresco
+  copy:
+    src: "{{ role_path }}/files/{{ alfresco_installer }}"
+    dest: "{{ ansible_env.HOME }}"
+    mode: 0755
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+  tags: install
 - name: Instala Alfresco
   vars:
     cmd: "{{ ansible_env.HOME }}/{{ alfresco_installer }}"
