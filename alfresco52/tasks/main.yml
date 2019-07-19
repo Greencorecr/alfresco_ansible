@@ -284,8 +284,12 @@
     file: "{{ ansible_env.HOME }}/{{ alfresco_installer }}"
   register: alfresco_installer
 - name: Descarga instalador de Alfresco si no existe
+  vars:
+    version_url: "alfresco-community-installer-201707-linux-x64.bin"
+    base_url: "/release/community/201707-build-00028/"
+    host_url: "https://download.alfresco.com"
   get_url:
-    url: https://download.alfresco.com/release/community/201707-build-00028/alfresco-community-installer-201707-linux-x64.bin
+    url: "{{ host_url }}{{ version_url }}/{{ base_url}}"
     dest: "{{ ansible_env.HOME }}/{{ alfresco_installer }}"
     mode: 0755
     owner: "{{ ansible_user }}"
@@ -371,7 +375,6 @@
     state: absent
   tags: mysql_postupgrade
   become: true
-
 - name: >
         Mueve el dir_root en blanco de la instalación de Alfresco,
         antes de importar
