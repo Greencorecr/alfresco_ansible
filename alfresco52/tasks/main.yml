@@ -292,8 +292,8 @@
     owner: "{{ ansible_user }}"
   tags: pgsql
   when: >
-        pgsql_installer_path.stat.exists is defined and 
-        pgsql_installer_path.stat.exists
+        pgsql_installer_path.stat.exists is not defined and 
+        not pgsql_installer_path.stat.exists
 - name: Copia alfresco
   copy:
     src: "{{ role_path }}/files/{{ alfresco_installer }}"
