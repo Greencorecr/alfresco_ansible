@@ -278,7 +278,7 @@
   tags: pgsql
 - name: Debug de path
   debug:
-    msg: pgsql_installer_path
+    msg: "{{ pgsql_installer_path }}"
   tags: pgsql
 - name: Descarga instalador de Alfresco si no existe
   vars:
