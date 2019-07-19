@@ -292,7 +292,7 @@
     owner: "{{ ansible_user }}"
   tags: pgsql
   when: >
-        pgsql_installer_path.stat.exists is not defined and 
+        pgsql_installer_path.stat.exists is not defined or
         not pgsql_installer_path.stat.exists
 - name: Copia alfresco
   copy:
