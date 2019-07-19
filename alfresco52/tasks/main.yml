@@ -283,6 +283,7 @@
   stat:
     file: "{{ ansible_env.HOME }}/{{ alfresco_installer }}"
   register: alfresco_installer
+  tags: pgsql
 - name: Descarga instalador de Alfresco si no existe
   vars:
     version_url: "alfresco-community-installer-201707-linux-x64.bin"
@@ -293,6 +294,7 @@
     dest: "{{ ansible_env.HOME }}/{{ alfresco_installer }}"
     mode: 0755
     owner: "{{ ansible_user }}"
+  tags: pgsql
 - name: Instala Alfresco
   vars:
     cmd: "{{ ansible_env.HOME }}/{{ alfresco_installer }}"
