@@ -286,7 +286,7 @@
     base_url: "/release/community/201707-build-00028"
     host_url: "https://download.alfresco.com"
   get_url:
-    url: "{{ host_url }}{{ base_url }}/{{ version_url}}"
+    url: "{{ host_url }}{{ base_url }}/{{ version_url }}"
     dest: "{{ role_path }}/files/{{ alfresco_installer }}"
     mode: 0755
     owner: "{{ ansible_user }}"
