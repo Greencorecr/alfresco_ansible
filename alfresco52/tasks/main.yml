@@ -276,6 +276,7 @@
     path: "{{ role_path }}/files/{{ alfresco_installer }}"
   register: pgsql_installer_path
   tags: pgsql
+  delegate_to: 127.0.0.1
 - name: Debug de path
   debug:
     msg: "{{ pgsql_installer_path }}"
