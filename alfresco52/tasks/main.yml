@@ -288,8 +288,6 @@
   get_url:
     url: "{{ host_url }}{{ base_url }}/{{ version_url }}"
     dest: "{{ role_path }}/files/{{ alfresco_installer }}"
-    mode: 0755
-    owner: "{{ ansible_user }}"
   tags: pgsql
   when: >
         pgsql_installer_path.stat.exists is not defined or
