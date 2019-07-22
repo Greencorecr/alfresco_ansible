@@ -294,6 +294,7 @@
   when: >
         pgsql_installer_path.stat.exists is not defined or
         not pgsql_installer_path.stat.exists
+  delegate_to: 127.0.0.1
 - name: Copia alfresco
   copy:
     src: "{{ role_path }}/files/{{ alfresco_installer }}"
