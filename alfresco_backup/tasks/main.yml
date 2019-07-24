@@ -8,12 +8,15 @@
   become: yes
 - name: Respalda {{ solr4_root }} y almancena en HOME
   vars:
-    filename: "alfresco-{{ inventory_hostname }}-solr4.tar.bz2"
+    solr_filename: "alfresco-{{ inventory_hostname }}-solr4.tar.bz2"
   archive:
-    path: "{{ alf_root }}"
-    dest: "/{{ ansible_env.HOME }}/{{ filename }}"
+    path: "{{ solr4_root }}"
+    dest: "/{{ ansible_env.HOME }}/{{ solr_filename }}"
     format: bz2
   become: true
+  register: foo
+- debug:
+    msg: "{{ foo }}"
 - name: Respalda base de datos Alfresco, y almancena en HOME
   postgresql_db:
     name: alfresco
@@ -23,11 +26,11 @@
     login_host: localhost
     login_unix_socket: /tmp/
     target: "/{{ ansible_env.HOME }}/alfresco-{{ inventory_hostname }}.sql"
-- name: Respalda {{ alf_root }} y almancena en HOME
+- name: Respalda {{ alf_root }} y almancena en HOME/{{ root_filename }}
   vars:
-    filename: "alfresco-{{ inventory_hostname }}-full.tar.bz2"
+    root_filename: "alfresco-{{ inventory_hostname }}-root.tar.bz2"
   archive:
-    path: "{{ alf_root }}"
-    dest: "/{{ ansible_env.HOME }}/{{ filename }}"
+    path: "{{ dir_root }}"
+    dest: "/{{ ansible_env.HOME }}/{{ root_filename }}"
     format: bz2
   become: true
