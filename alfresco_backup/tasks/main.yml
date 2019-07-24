@@ -21,7 +21,7 @@
     login_user: alfresco
     login_password: "greencore"
     login_host: localhost
-    login_unix_socket: /tmp/ 
+    login_unix_socket: /tmp/
     target: "/{{ ansible_env.HOME }}/alfresco-{{ inventory_hostname }}.sql"
 - name: Respalda {{ alf_root }} y almancena en HOME
   vars:

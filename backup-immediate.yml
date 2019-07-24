@@ -1,9 +1,5 @@
 ---
 - name: Realiza un respaldo completo de Alfresco
   hosts: all
-#  vars:
-#    role_path: alfresco52/
-#    mariadb_cron_backup: true
-#    mariadb_cron_optimizacion: true
   roles:
     - alfresco_backup
