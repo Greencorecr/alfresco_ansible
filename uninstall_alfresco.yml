@@ -1,0 +1,5 @@
+---
+- name: Instala Alfresco 5.2 fuera de ambiente de contenedores
+  hosts: all
+  roles:
+    - alfresco_uninstall

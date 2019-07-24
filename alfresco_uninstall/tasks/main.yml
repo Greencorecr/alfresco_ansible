@@ -1,0 +1,15 @@
+---
+- name: Detiene Alfresco antes de postinstalación
+  service:
+    name: alfresco.service
+    state: stopped
+  become: true
+#  ignore_errors: "{{ ansible_check_mode }}"
+- name: Desinstala Alfresco
+  vars:
+    cmd: "{{ alf_root }}/uninstall"
+  command: "{{ cmd }} --mode unattended "
+  become: true
+  register: alf_install
+  tags: install
+  changed_when: true
