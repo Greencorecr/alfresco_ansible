@@ -1,5 +1,5 @@
 ---
-- name: Detiene Alfresco antes de postinstalación
+- name: Detiene Alfresco antes de desinstalar
   service:
     name: alfresco.service
     state: stopped
