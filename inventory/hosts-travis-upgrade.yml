@@ -8,5 +8,5 @@
         alf_glob_prop_path: /opt/alfresco_community/tomcat/shared/classes/alfresco-global.properties
         alf_root: /opt/alfresco_community_5.2
         dir_root: "{{ alf_root }}/alf_data"
-        solr4_root: "{{ dir_root }}/solr4/index
+        solr4_root: "{{ dir_root }}/solr4/index"
         mysql_root_pass: root
