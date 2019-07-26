@@ -20,6 +20,13 @@
   command: mv {{ dir_root }} /opt/dir_root.old
   become: true
   changed_when: true
+- name: Crear {{ dir_root }}
+  file:
+    path: "{{ dir_root }}"
+    state: directory
+    owner: alfresco
+    group: alfresco
+  become: yes
 - name: Importa dir_root de respaldo
   vars:
     root_filename: "alfresco-{{ inventory_hostname }}-root.tar.bz2"
