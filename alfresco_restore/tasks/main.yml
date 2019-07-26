@@ -1,0 +1,56 @@
+---
+- name: Detiene Alfresco antes de restaurar
+  service:
+    name: alfresco.service
+    state: stopped
+  become: true
+  ignore_errors: "{{ ansible_check_mode }}"
+- name: Encuentra PID de tomcat
+  pids:
+    name: java
+  register: tomcat_pid
+- name: Espera hasta que se detenga Alfresco
+  wait_for:
+    path: "/proc/{{ tomcat_pid.pids|join(',') }} }}/status"
+    state: absent
+  become: true
+- name: >
+        Mueve el dir_root en blanco de la instalación de Alfresco,
+        antes de importar
+  command: mv {{ dir_root }} /opt/dir_root.old
+  become: true
+  changed_when: true
+- name: Importa dir_root de respaldo
+  vars:
+    root_filename: "alfresco-{{ inventory_hostname }}-root.tar.bz2"
+  unarchive:
+    src: "/{{ ansible_env.HOME }}/{{ root_filename }}"
+    dest: "{{ dir_root }}"
+ become: true
+- name: Importa base de datos para restaurar
+  postgresql_db:
+    name: alfresco
+    state: import
+    login_user: alfresco
+    login_password: "greencore"
+    login_host: localhost
+    login_unix_socket: /tmp/
+    target: "/{{ ansible_env.HOME }}/alfresco-{{ inventory_hostname }}.sql"
+  become: true
+- name: Levanta Alfresco luego de restaurar
+  service:
+    name: alfresco.service
+    state: restarted
+  become: true
+  ignore_errors: "{{ ansible_check_mode }}"
+- name: Revisa cada 10s, si ya esta abierto puerto 8080 luego de actualizar
+  wait_for:
+    port: 8080
+    delay: 10
+- name: Espera a que se complete instalador
+  pause:
+    seconds: 180
+- name: Comprobamos servicio de Alfresco por puerto TCP/8080 luego de actualizar
+  uri:
+    url: http://localhost:8080/share/
+    status_code: 200

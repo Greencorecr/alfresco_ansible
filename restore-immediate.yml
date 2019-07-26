@@ -1,0 +1,6 @@
+---
+- name: Restaura un respaldo de Alfresco
+  hosts: all
+  roles:
+    - alfresco_base
+    - alfresco_restore

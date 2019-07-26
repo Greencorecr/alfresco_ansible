@@ -11,10 +11,11 @@ install:
   - sudo pip install ansible psutil molecule
 
 script:
-  - for dir in alfresco_base alfresco_install alfresco_backup alfresco_uninstall; do ( cd $dir ; molecule lint ) ; done
+  - for dir in alfresco_base alfresco_install alfresco_uninstall alfresco_backup alfresco_restore; do ( cd $dir ; molecule lint ) ; done
   - ansible -i inventory/hosts-travis-upgrade.yml --list-hosts all
   - ansible-playbook -i inventory/hosts-travis-upgrade.yml --syntax-check *yml
   - ansible-playbook -i inventory/hosts-travis-upgrade.yml install_alfresco52-pgsql_no_docker.yml
   - ansible-playbook -i inventory/hosts-travis-upgrade.yml backup-immediate.yml
   - ansible-playbook -i inventory/hosts-travis-upgrade.yml uninstall_alfresco.yml
   - ansible-playbook -i inventory/hosts-travis-upgrade.yml install_alfresco52-pgsql_no_docker.yml
+  - ansible-playbook -i inventory/hosts-travis-upgrade.yml restore-immediate.yml
