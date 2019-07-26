@@ -35,7 +35,7 @@
 - name: Importa base de datos para restaurar
   postgresql_db:
     name: alfresco
-    state: import
+    state: restore
     login_user: alfresco
     login_password: "greencore"
     login_host: localhost
