@@ -24,8 +24,6 @@
   file:
     path: "{{ dir_root }}"
     state: directory
-    owner: alfresco
-    group: alfresco
   become: yes
 - name: Importa dir_root de respaldo
   vars:
