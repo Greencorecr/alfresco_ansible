@@ -2,4 +2,5 @@
 - name: Realiza un respaldo completo de Alfresco
   hosts: all
   roles:
+    - alfresco_base
     - alfresco_backup

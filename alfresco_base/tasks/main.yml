@@ -1,0 +1,58 @@
+---
+# tasks file for alfresco_base
+- name: Instala aptitude (requerido por ansible)
+  apt:
+    name: aptitude
+    state: present
+    update_cache: true
+  become: true
+- name: Actualiza cache
+  apt:
+    update_cache: true
+  become: true
+- name: Actualiza paquetes
+  apt:
+    upgrade: dist
+  become: true
+- name: autoremueve
+  apt:
+    autoremove: true
+  become: true
+- name: Instala dependencias para Alfresco
+  apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - libfontconfig1-dev
+    - libice-dev
+    - libsm-dev
+    - libxrender-dev
+    - libxext-dev
+    - libxinerama-dev
+    - libcups2-dev
+    - libglu-dev
+    - libcairo2
+    - libgl1-mesa-glx
+    - rsync
+    - python-psutil
+  become: true
+- name: Revisa que exista alfresco-global.properties según inventario
+  stat:
+    path: "{{ alf_glob_prop_path }}"
+- name: Comprueba dir.root
+  lineinfile:
+    path: "{{ alf_glob_prop_path }}"
+    line: "dir.root={{ dir_root }}"
+  tags: mysql_preupgrade
+  check_mode: true
+  become: true
+  register: dir_root_ok
+  failed_when: dir_root_ok.changed
+#- name: Instala paquetes de MariaDB
+#  apt:
+#    name: "{{ item }}"
+#    state: present
+#  loop:
+#    - mariadb-server
+#    - python-pymysql
+#  become: true

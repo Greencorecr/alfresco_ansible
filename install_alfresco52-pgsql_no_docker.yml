@@ -4,4 +4,5 @@
   vars:
     role_path: alfresco52/
   roles:
+    - alfresco_base
     - alfresco52
