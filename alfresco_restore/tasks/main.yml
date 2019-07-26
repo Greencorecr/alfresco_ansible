@@ -26,7 +26,7 @@
   unarchive:
     src: "/{{ ansible_env.HOME }}/{{ root_filename }}"
     dest: "{{ dir_root }}"
- become: true
+  become: true
 - name: Importa base de datos para restaurar
   postgresql_db:
     name: alfresco
