@@ -1,0 +1,185 @@
+---
+# tasks file for alfresco_install
+#- name: Preconfigura contraseñas, en paquete de MariaDB
+#  debconf:
+#    name: mariadb-server
+#    question: "{{ item }}"
+#    value: "{{ mysql_root_pass }}"
+#    vtype: password
+#  loop:
+#    - mysql-server/root_password
+#    - mysql-server/root_password_again
+#  become: true
+#  tags: mysql_install
+#- name: Instala paquetes de MariaDB
+#  apt:
+#    name: "{{ item }}"
+#    state: present
+#  loop:
+#    - mariadb-server
+#    - python-pymysql
+#  become: true
+#  tags:
+#    - mysql_install
+#    - mysql_preupgrade
+#- name: Inicia base de datos
+#  service:
+#    name: mysql
+#    state: started
+#    enabled: true
+#  become: true
+#  ignore_errors: "{{ ansible_check_mode }}"
+#  tags: mysql_install
+#- name: Configura usuario root de MySQL
+#  mysql_user:
+#    name: root
+#    host: "{{ item }}"
+#    login_unix_socket: /var/run/mysqld/mysqld.sock
+#    password: "{{ mysql_root_pass }}"
+#    priv: '*.*:ALL,GRANT'
+#    check_implicit_admin: true
+#  loop:
+#    - "{{ ansible_hostname }}"
+#    - 127.0.0.1
+#    - ::1
+#    - localhost
+#  become: true
+#  tags: mysql_install
+#- name: Crea base de datos en MariaDB
+#  mysql_db:
+#    name: alfresco
+#    state: present
+#    login_user: root
+#    login_password: "{{ mysql_root_pass }}"
+#    login_unix_socket: /var/run/mysqld/mysqld.sock
+#    encoding: utf8
+#  become: true
+#  tags:
+#    - mysql_install
+#    - mysql_preupgrade
+#- name: Crea usuario en base de datos MariaDB
+#  mysql_user:
+#    name: alfresco
+#    host: "{{ item }}"
+#    password: alfresco
+#    state: present
+#    priv: 'alfresco.*:ALL'
+#    login_user: root
+#    login_password: "{{ mysql_root_pass }}"
+#    login_unix_socket: /var/run/mysqld/mysqld.sock
+#  loop:
+#    - "{{ ansible_hostname }}"
+#    - 127.0.0.1
+#    - ::1
+#    - localhost
+#  become: true
+#  tags:
+#    - mysql_install
+#    - mysql_preupgrade
+#- name: Reinicia base de datos para aplicar usuario
+#  service:
+#    name: mysql
+#    state: restarted
+#    enabled: true
+#  become: true
+#  tags: mysql_install
+- name: Copia configuracion para alfresco, usando PostgreSQL
+  copy:
+    src: "{{ role_path }}/files/option-file-pgsql.txt"
+    dest: "{{ ansible_env.HOME }}/option-file.txt"
+    mode: 0644
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+#  tags: pgsql
+#- name: Copia configuracion para alfresco, usando MySQL
+#  copy:
+#    src: "{{ role_path }}/files/option-file-mysql.txt"
+#    dest: "{{ ansible_env.HOME }}/option-file.txt"
+#    mode: 0644
+#    owner: "{{ ansible_user }}"
+#    group: "{{ ansible_user }}"
+#  tags: mysql
+- name: Revisa que Alfresco no esté instalado
+  stat:
+    path: /opt/alfresco_community
+  register: alfresco_dir
+- name: Presenta error si Alfresco ha sido instalado
+  fail:
+    msg: Alfresco ha sido instalado, omitiendo completar instalación
+  when: alfresco_dir.stat.isdir is defined and alfresco_dir.stat.isdir
+- name: Revisa si está descargado el instalador {{ alfresco_installer }}
+  stat:
+    path: "{{ role_path }}/files/{{ alfresco_installer }}"
+  register: pgsql_installer_path
+#  tags: pgsql
+  delegate_to: 127.0.0.1
+- name: Debug de path
+  debug:
+    msg: "{{ pgsql_installer_path }}"
+- name: Descarga instalador de Alfresco si no existe
+  vars:
+    version_url: "alfresco-community-installer-201707-linux-x64.bin"
+    base_url: "/release/community/201707-build-00028"
+    host_url: "https://download.alfresco.com"
+  get_url:
+    url: "{{ host_url }}{{ base_url }}/{{ version_url }}"
+    dest: "{{ role_path }}/files/{{ alfresco_installer }}"
+  when: >
+        pgsql_installer_path.stat.exists is not defined or
+        not pgsql_installer_path.stat.exists
+  delegate_to: 127.0.0.1
+- name: Copia alfresco
+  copy:
+    src: "{{ role_path }}/files/{{ alfresco_installer }}"
+    dest: "{{ ansible_env.HOME }}"
+    mode: 0755
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+- name: Instala Alfresco
+  vars:
+    cmd: "{{ ansible_env.HOME }}/{{ alfresco_installer }}"
+  command: "{{ cmd }} --optionfile {{ ansible_env.HOME }}/option-file.txt"
+  become: true
+  register: alf_install
+  changed_when: true
+#- name: Copia modulo para Java y MySQL
+#  vars:
+#    srcpath: https://downloads.mysql.com/archives/get/file/
+#  unarchive:
+#    src: "{{ srcpath }}mysql-connector-java-5.1.46.tar.gz"
+#    dest: /opt/alfresco_community/tomcat/lib/
+#    remote_src: true
+#    extra_opts:
+#      - 'mysql-connector-java-5.1.46/mysql-connector-java-5.1.46.jar'
+#  become: true
+#  ignore_errors: "{{ ansible_check_mode }}"
+#  tags: mysql
+#- name: Copia módulo para Java y MySQL a directorio apropiado
+#  vars:
+#    srcpath: /opt/alfresco_community/tomcat/lib/mysql-connector-java-5.1.46/
+#  copy:
+#    remote_src: true
+#    src: "{{ srcpath }}mysql-connector-java-5.1.46.jar"
+#    dest: /opt/alfresco_community/tomcat/lib/
+#  become: true
+#  ignore_errors: "{{ ansible_check_mode }}"
+#  tags:
+#    - mysql
+#    - mysql_postinstall
+- name: Levanta Alfresco
+  service:
+    name: alfresco.service
+    state: restarted
+  become: true
+  ignore_errors: "{{ ansible_check_mode }}"
+- name: Revisa cada 10s, si ya esta abierto puerto 8080
+  wait_for:
+    port: 8080
+    delay: 10
+- name: Espera a que se complete instalador
+  pause:
+    seconds: 180
+- name: Comprobamos servicio de Alfresco por puerto TCP/8080
+  uri:
+    url: http://localhost:8080/share/
+    status_code: 200

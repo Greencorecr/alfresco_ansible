@@ -5,4 +5,5 @@
     role_path: alfresco52/
   roles:
     - alfresco_base
-    - alfresco52
+#    - alfresco52
+    - alfresco_install

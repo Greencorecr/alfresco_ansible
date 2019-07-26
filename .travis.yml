@@ -13,16 +13,14 @@ install:
 script:
   - wget -O /home/travis/build/Greencorecr/alfresco_ansible/alfresco52/files/alfresco-community-installer-201602-linux-x64.bin https://ayera.dl.sourceforge.net/project/alfresco/Alfresco%20201602%20Community/alfresco-community-installer-201602-linux-x64.bin
 #  - wget -O /home/travis/build/Greencorecr/alfresco_ansible/alfresco52/files/alfresco-community-installer-201707-linux-x64.bin https://download.alfresco.com/release/community/201707-build-00028/alfresco-community-installer-201707-linux-x64.bin
-  - ( cd alfresco52 ; molecule lint )
-  - ( cd alfresco_backup/ ; molecule lint )
-  - ( cd alfresco_uninstall/ ; molecule lint )
+  - for dir in alfresco_base alfresco_install alfresco_backup alfresco_uninstall; do ( cd $dir ; molecule lint ) ; done
   - "ansible -i inventory/hosts-travis-upgrade.yml --list-hosts all"
   - "ansible-playbook -i inventory/hosts-travis-upgrade.yml --syntax-check *yml"
   #- "ansible-playbook -i inventory/hosts-travis-install-old.yml install_alfresco52-mysql_no_docker.yml --tags install,mysql_install,mysql"
   #- "ansible-playbook -i inventory/hosts-travis-upgrade.yml install_alfresco52-mysql_no_docker.yml --tags install,mysql_preupgrade,mysql,mysql_postupgrade"
-  - ansible-playbook -i inventory/hosts-travis-upgrade.yml install_alfresco52-pgsql_no_docker.yml --tags install,pgsql
+  - ansible-playbook -i inventory/hosts-travis-upgrade.yml install_alfresco52-pgsql_no_docker.yml
   - ansible-playbook -i inventory/hosts-travis-upgrade.yml backup-immediate.yml
   - ls ~/
   # Desintalamos, reinstalamos y cargamos respaldo
   - ansible-playbook -i inventory/hosts-travis-upgrade.yml uninstall_alfresco.yml
-  - ansible-playbook -i inventory/hosts-travis-upgrade.yml install_alfresco52-pgsql_no_docker.yml --tags install,pgsql
+  - ansible-playbook -i inventory/hosts-travis-upgrade.yml install_alfresco52-pgsql_no_docker.yml
