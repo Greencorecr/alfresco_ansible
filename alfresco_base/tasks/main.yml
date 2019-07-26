@@ -20,21 +20,23 @@
   become: true
 - name: Instala dependencias para Alfresco
   apt:
-    name: "{{ item }}"
+    name:
+      - libfontconfig1-dev
+      - libice-dev
+      - libsm-dev
+      - libxrender-dev
+      - libxext-dev
+      - libxinerama-dev
+      - libcups2-dev
+      - libglu-dev
+      - libcairo2
+      - libgl1-mesa-glx
+      - rsync
+      - python-psutil
+      - postgresql-client-common
+      - postgresql-client-10
     state: present
   loop:
-    - libfontconfig1-dev
-    - libice-dev
-    - libsm-dev
-    - libxrender-dev
-    - libxext-dev
-    - libxinerama-dev
-    - libcups2-dev
-    - libglu-dev
-    - libcairo2
-    - libgl1-mesa-glx
-    - rsync
-    - python-psutil
   become: true
 - name: Revisa que exista alfresco-global.properties según inventario
   stat:

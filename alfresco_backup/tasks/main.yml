@@ -1,11 +1,4 @@
 ---
-- name: Instala paquetes requeridos
-  apt:
-    name:
-      - postgresql-client-common
-      - postgresql-client-10
-    state: present
-  become: yes
 - name: Respalda {{ solr4_root }} y almancena en HOME
   vars:
     solr_filename: "alfresco-{{ inventory_hostname }}-solr4.tar.bz2"
@@ -14,9 +7,6 @@
     dest: "/{{ ansible_env.HOME }}/{{ solr_filename }}"
     format: bz2
   become: true
-  register: foo
-- debug:
-    msg: "{{ foo }}"
 - name: Respalda base de datos Alfresco, y almancena en HOME
   postgresql_db:
     name: alfresco

@@ -113,9 +113,6 @@
   register: pgsql_installer_path
 #  tags: pgsql
   delegate_to: 127.0.0.1
-- name: Debug de path
-  debug:
-    msg: "{{ pgsql_installer_path }}"
 - name: Descarga instalador de Alfresco si no existe
   vars:
     version_url: "alfresco-community-installer-201707-linux-x64.bin"
